@@ -1,7 +1,14 @@
-const Page = () => {
+import prisma from '@/prisma/db';
+import DataTable from '@/app/tickets/DataTable';
+
+const Page = async () => {
+  const tickets = await prisma.ticket.findMany();
+
   return (
     <div>
-      <h1>tickets page</h1>
+      <div>
+        <DataTable tickets={tickets} />
+      </div>
     </div>
   );
 };
