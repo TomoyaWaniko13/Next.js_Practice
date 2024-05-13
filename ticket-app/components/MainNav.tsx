@@ -1,16 +1,17 @@
+'use client';
 import Link from 'next/link';
+import ToggleModeButton from '@/components/ToggleModeButton';
+import MainNavLinks from '@/components/MainNavLinks';
 
 const MainNav = () => {
   return (
     <div className={'flex justify-between'}>
-      <div className={'flex  items-center gap-2'}>
-        <Link href={'/'}>dashboard</Link>
-        <Link href={'/tickets'}>tickets</Link>
-        <Link href={'/users'}>users</Link>
-      </div>
+      <MainNavLinks />
       <div className={'flex items-center gap-2'}>
         <Link href={'/'}>logout</Link>
-        <Link href={'/'}>dark</Link>
+        <Link href={'/'}>
+          <ToggleModeButton />
+        </Link>
       </div>
     </div>
   );
