@@ -12,7 +12,6 @@ const priorityMap: Record<Priority, { label: String; level: 1 | 2 | 3 }> = {
 };
 
 const TicketPriority = ({ priority }: Props) => {
-  console.log(priority);
   return (
     <div className={'flex'}>
       <Flame className={`${priorityMap[priority].level >= 1 ? 'text-red-500' : 'text-gray-300'} `} />
