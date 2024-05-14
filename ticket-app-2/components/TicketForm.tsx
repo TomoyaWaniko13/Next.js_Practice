@@ -1,3 +1,4 @@
+'use client';
 import { z } from 'zod';
 import { ticketSchema } from '@/ValidationSchemas/ticket';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,13 +11,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { Ticket } from '@prisma/client';
 
 // You can extract the TypeScript type of any schema with z.infer<typeof mySchema> .
 type TicketFormData = z.infer<typeof ticketSchema>;
 
-const TicketForm = () => {
+interface Props {
+  ticket?: Ticket;
+}
+
+// client-side component
+const TicketForm = ({ ticket }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const router = useRouter();
 
   // https://react-hook-form.com/docs/useform
   // https://github.com/react-hook-form/resolvers
@@ -30,11 +40,22 @@ const TicketForm = () => {
       setIsSubmitting(true);
       setError(''); // no error
 
-      // send a POST request to the server.
-      // '/api/tickets' is the endpoint to which the request is sent.
-      //  values is the data that is sent as the body of the request.
-      await axios.post('/api/tickets', values);
+      if (ticket) {
+        // send a PATCH request to teh server.
+        await axios.patch('/api/ticket' + ticket.id);
+      } else {
+        // send a POST request to the server.
+        // '/api/tickets' is the endpoint to which the request is sent.
+        //  values is the data that is sent as the body of the request.
+        await axios.post('/api/tickets', values);
+      }
+
+      setIsSubmitting(false);
+
+      router.push('/tickets');
+      router.refresh();
     } catch (e) {
+      console.log(e);
       setError('unknown error occurred');
       setIsSubmitting(false);
     }
@@ -52,6 +73,7 @@ const TicketForm = () => {
           <FormField
             control={form.control}
             name={'title'}
+            defaultValue={ticket?.title}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ticket title</FormLabel>
@@ -66,6 +88,7 @@ const TicketForm = () => {
           {/*Controller = Wrapper component for controlled inputs*/}
           <Controller
             name={'description'}
+            defaultValue={ticket?.description}
             control={form.control}
             render={({ field }) => <SimpleMDE placeholder={'description'} {...field} />}
           />
@@ -85,7 +108,7 @@ const TicketForm = () => {
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={'status'} />
+                        <SelectValue placeholder={'status'} defaultValue={ticket?.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -111,7 +134,7 @@ const TicketForm = () => {
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={'priority'} />
+                        <SelectValue placeholder={'priority'} defaultValue={ticket?.priority} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -124,7 +147,7 @@ const TicketForm = () => {
               )}
             ></FormField>
           </div>
-          <Button type={'submit'}>Submit</Button>
+          <Button type={'submit'}>{ticket ? 'update ticket' : 'create ticket'}</Button>
         </form>
       </Form>
     </div>

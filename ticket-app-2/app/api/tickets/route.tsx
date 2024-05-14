@@ -4,6 +4,7 @@ import prisma from '@/prisma/db';
 
 // server side(backend) api
 export async function POST(request: NextRequest) {
+  // https://developer.mozilla.org/en-US/docs/Web/API/Request/json
   const body = await request.json();
   // https://github.com/colinhacks/zod?tab=readme-ov-file#safeparse
   const validation = ticketSchema.safeParse(body);
