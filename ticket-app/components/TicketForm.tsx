@@ -34,18 +34,17 @@ const TicketForm = ({ ticket }: Props) => {
       setIsSubmitting(true);
       setError('');
 
-      // The if (ticket) {...} else {...} block checks if a ticket prop is provided.
-      // If it is, it sends a PATCH request to update the ticket. Otherwise, it sends
-      // a POST request to create a new ticket. The await keyword is used to pause the
-      // execution of the function until the request is completed.
-
-      // This request is received by your server-side code in route.ts, which then uses
-      // Prisma Client to interact with your database:
+      // the function checks if the ticket prop is provided. If it is, it sends a PATCH
+      // request to update the existing ticket. Otherwise, it sends a POST request to create
+      // a new ticket. The await keyword is used to pause the execution of the function until
+      // the request is completed.
       if (ticket) {
         await axios.patch('/api/tickets/' + ticket.id, values);
       } else {
         await axios.post('/api/tickets', values);
       }
+      // After the request is completed, the function sets isSubmitting back
+      // to false and navigates the user to the '/tickets' route, then refreshes the page.
       setIsSubmitting(false);
       router.push('/tickets');
       router.refresh();

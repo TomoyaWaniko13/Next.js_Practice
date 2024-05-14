@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
+import { Button } from './ui/button';
 
 const ToggleMode = () => {
   const { theme, setTheme } = useTheme();
@@ -14,14 +14,18 @@ const ToggleMode = () => {
   }, []);
 
   if (!mounted) {
-    return <Button variant={'outline'} size={'icon'} disabled={true}></Button>
+    return <Button variant='outline' size='icon' disabled={true}></Button>;
   }
 
-  const currentlyDark = theme === 'dark';
+  const dark = theme === 'dark';
 
   return (
-    <Button variant={'outline'} size={'icon'} onClick={() => setTheme(`${currentlyDark ? 'light' : 'dark'}`)}>
-      {currentlyDark ? <Sun className={'hover:cursor-pointer hover:text-primary'} /> : <Moon className={'hover:cursor-pointer hover:text-primary'}/>}
+    <Button variant='outline' size='icon' onClick={() => setTheme(`${dark ? 'light' : 'dark'}`)}>
+      {dark ? (
+        <Sun className='hover:cursor-pointer hover:text-primary' />
+      ) : (
+        <Moon className='hover:cursor-pointer hover:text-primary' />
+      )}
     </Button>
   );
 };
