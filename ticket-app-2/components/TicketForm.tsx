@@ -96,6 +96,7 @@ const TicketForm = ({ ticket }: Props) => {
             <FormField
               control={form.control}
               name={'status'}
+              defaultValue={ticket?.status}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>status</FormLabel>
@@ -125,6 +126,7 @@ const TicketForm = ({ ticket }: Props) => {
             <FormField
               control={form.control}
               name={'priority'}
+              defaultValue={ticket?.priority}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>priority</FormLabel>

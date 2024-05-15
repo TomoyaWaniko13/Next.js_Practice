@@ -1,5 +1,5 @@
 import prisma from '@/prisma/db';
-import DataTable from '@/app/tickets/DataTable';
+import TicketsDataTable from '@/app/tickets/TicketsDataTable';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 
@@ -12,7 +12,7 @@ const TicketsPage = async () => {
       <Link href={'/tickets/new'} className={buttonVariants({ variant: 'default' })}>
         new ticket
       </Link>
-      <DataTable tickets={tickets} />
+      <TicketsDataTable tickets={tickets} />
     </div>
   );
 };
