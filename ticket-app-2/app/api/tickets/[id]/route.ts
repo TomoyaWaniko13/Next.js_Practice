@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ticketSchema } from '@/ValidationSchemas/ticket';
 import prisma from '@/prisma/db';
 
-// So we're going to pass in a string value to update our tickets.
+// we're going to pass in a string value to update our tickets.
 interface Props {
   params: { id: string };
 }
@@ -33,4 +33,5 @@ export async function PATCH(request: NextRequest, { params }: Props) {
       ...body,
     },
   });
+  return NextResponse.json(updateTicket, { status: 200 });
 }

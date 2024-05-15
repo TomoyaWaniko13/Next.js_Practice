@@ -31,7 +31,7 @@ const TicketDetail = ({ ticket }: Props) => {
             })}
           </CardDescription>
         </CardHeader>
-        <CardContent className={'prose'}>
+        <CardContent className={'prose dark:prose-invert'}>
           <Markdown>{ticket.description}</Markdown>
         </CardContent>
         <CardFooter>

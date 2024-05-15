@@ -1,115 +1,89 @@
 'use client';
-import { z } from 'zod';
+import React, { useState } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { ticketSchema } from '@/ValidationSchemas/ticket';
+import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input } from './ui/input';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Button } from './ui/button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Ticket } from '@prisma/client';
 
-// You can extract the TypeScript type of any schema with z.infer<typeof mySchema> .
 type TicketFormData = z.infer<typeof ticketSchema>;
 
 interface Props {
   ticket?: Ticket;
 }
 
-// client-side component
 const TicketForm = ({ ticket }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-
   const router = useRouter();
 
-  // https://react-hook-form.com/docs/useform
-  // https://github.com/react-hook-form/resolvers
   const form = useForm<TicketFormData>({
     resolver: zodResolver(ticketSchema),
   });
 
-  // You can extract the TypeScript type of any schema with z.infer<typeof mySchema> .
-  const onSubmit = async (values: z.infer<typeof ticketSchema>) => {
+  async function onSubmit(values: z.infer<typeof ticketSchema>) {
     try {
       setIsSubmitting(true);
-      setError(''); // no error
+      setError('');
 
       if (ticket) {
-        // send a PATCH request to teh server.
-        await axios.patch('/api/ticket' + ticket.id);
+        await axios.patch('/api/tickets/' + ticket.id, values);
       } else {
-        // send a POST request to the server.
-        // '/api/tickets' is the endpoint to which the request is sent.
-        //  values is the data that is sent as the body of the request.
         await axios.post('/api/tickets', values);
       }
-
       setIsSubmitting(false);
-
       router.push('/tickets');
       router.refresh();
-    } catch (e) {
-      console.log(e);
-      setError('unknown error occurred');
+    } catch (error) {
+      console.log(error);
+      setError('Unknown Error Occured.');
       setIsSubmitting(false);
     }
-  };
+  }
 
   return (
-    <div className={'rounded-md border w-full p-4'}>
-      {/*https://ui.shadcn.com/docs/components/form*/}
+    <div className='rounded-md border w-full p-4'>
       <Form {...form}>
-        {/*https://react-hook-form.com/docs/useform/handlesubmit*/}
-        {/*form.handleSubmit = Ready to send to the server*/}
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          {/*https://react-hook-form.com/docs/useform/control*/}
-          {/*form.control = Take control of the form*/}
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full'>
           <FormField
             control={form.control}
-            name={'title'}
+            name='title'
             defaultValue={ticket?.title}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ticket title</FormLabel>
+                <FormLabel>Ticket Title</FormLabel>
                 <FormControl>
-                  {/*https://ui.shadcn.com/docs/components/input*/}
-                  <Input placeholder={'ticket title'} {...field} />
+                  <Input placeholder='Ticket Title...' {...field} />
                 </FormControl>
               </FormItem>
             )}
           />
-          {/*https://react-hook-form.com/docs/usecontroller/controller*/}
-          {/*Controller = Wrapper component for controlled inputs*/}
           <Controller
-            name={'description'}
+            name='description'
             defaultValue={ticket?.description}
             control={form.control}
-            render={({ field }) => <SimpleMDE placeholder={'description'} {...field} />}
+            render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
           />
-          <div className={'flex w-full space-x-4 mb-4'}>
+          <div className='flex w-full space-x-4'>
             <FormField
               control={form.control}
-              name={'status'}
+              name='status'
               defaultValue={ticket?.status}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>status</FormLabel>
-                  {/*https://ui.shadcn.com/docs/components/select*/}
-                  {/*Displays a list of options for the user to pick from—triggered by a button.*/}
-                  {/*The onValueChange prop is assigned to field.onChange. This is a function that gets
-                  called whenever the value of the select field changes. The field.onChange function is
-                  provided by the react-hook-form library and is used to update the form state whenever the
-                  field's value changes.*/}
+                  <FormLabel>Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={'status'} defaultValue={ticket?.status} />
+                        <SelectValue placeholder='Status...' defaultValue={ticket?.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -121,22 +95,17 @@ const TicketForm = ({ ticket }: Props) => {
                 </FormItem>
               )}
             />
-            {/*https://react-hook-form.com/docs/useform/control*/}
-            {/*form.control = Take control of the form*/}
             <FormField
               control={form.control}
-              name={'priority'}
+              name='priority'
               defaultValue={ticket?.priority}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>priority</FormLabel>
-                  {/*https://www.react-hook-form.com/api/usecontroller/controller/*/}
-                  {/*onChange = A function which sends the input's value to the library.*/}
-                  {/*value = The current value of the controlled component*/}
+                  <FormLabel>Priority</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={'priority'} defaultValue={ticket?.priority} />
+                        <SelectValue placeholder='Priority...' defaultValue={ticket?.priority} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -147,11 +116,14 @@ const TicketForm = ({ ticket }: Props) => {
                   </Select>
                 </FormItem>
               )}
-            ></FormField>
+            />
           </div>
-          <Button type={'submit'}>{ticket ? 'update ticket' : 'create ticket'}</Button>
+          <Button type='submit' disabled={isSubmitting}>
+            {ticket ? 'Update Ticket' : 'Create Ticket'}
+          </Button>
         </form>
       </Form>
+      <p className='text-destructive'>{error}</p>
     </div>
   );
 };
