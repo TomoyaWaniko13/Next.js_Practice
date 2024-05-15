@@ -5,25 +5,28 @@ import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-rea
 import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
-  itemCount: number;
+  numberOfItems: number;
   pageSize: number;
   currentPage: number;
 }
 
-const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
-  const pageCount = Math.ceil(itemCount / pageSize);
+const Pagination = ({ numberOfItems, pageSize, currentPage }: Props) => {
+  const numberOfPages = Math.ceil(numberOfItems / pageSize);
   const router = useRouter();
   const searchParams = useSearchParams();
-  if (pageCount <= 1) return null;
+  if (numberOfPages <= 1) return null;
 
-  const changePage = (page: number) => {
+  const changePage = (nextPage: number) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', page.toString());
+    //  change the value of the 'page' parameter to the value of nextPage.
+    params.set('page', nextPage.toString());
+    // in the context of this code, params.toString() generates a query string from
+    // the URLSearchParams object, but it does not include the leading '?' character.
     router.push('?' + params.toString());
   };
 
   return (
-    <div>
+    <div className='mt-4'>
       <div>
         <Button variant={'outline'} disabled={currentPage === 1} onClick={() => changePage(1)}>
           <ChevronFirst />
@@ -31,15 +34,19 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
         <Button variant={'outline'} disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>
           <ChevronLeft />
         </Button>
-        <Button variant={'outline'} disabled={currentPage === pageCount} onClick={() => changePage(currentPage + 1)}>
+        <Button
+          variant={'outline'}
+          disabled={currentPage === numberOfPages}
+          onClick={() => changePage(currentPage + 1)}
+        >
           <ChevronRight />
         </Button>
-        <Button variant={'outline'} disabled={currentPage === pageCount} onClick={() => changePage(pageCount)}>
+        <Button variant={'outline'} disabled={currentPage === numberOfPages} onClick={() => changePage(numberOfPages)}>
           <ChevronLast />
         </Button>
       </div>
       <p>
-        page {currentPage} of {pageCount}
+        page {currentPage} of {numberOfPages}
       </p>
     </div>
   );
