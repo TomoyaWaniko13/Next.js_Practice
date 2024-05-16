@@ -1,7 +1,8 @@
-import prisma from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { NextRequest, NextResponse } from 'next/server';
 import { userSchema } from '@/ValidationSchemas/users';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 /**
  * Interface for the properties of the request.
@@ -43,10 +44,13 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   }
 
   // If a new password is provided, hash it
-  if (body?.password) {
+  if (body?.password && body.password !== '') {
     const hashPassword = await bcrypt.hash(body.password, 10);
     body.password = hashPassword;
+  } else {
+    delete body.passwrod;
   }
+  console.log(body);
 
   // If the username is changed, check for duplicates
   if (user.username !== body.username) {
