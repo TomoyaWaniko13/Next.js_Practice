@@ -5,13 +5,13 @@ import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-rea
 import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
-  numberOfItems: number;
+  numberOfTickets: number;
   pageSize: number;
   currentPage: number;
 }
 
-const Pagination = ({ numberOfItems, pageSize, currentPage }: Props) => {
-  const numberOfPages = Math.ceil(numberOfItems / pageSize);
+const Pagination = ({ numberOfTickets, pageSize, currentPage }: Props) => {
+  const numberOfPages = Math.ceil(numberOfTickets / pageSize);
   const router = useRouter();
   const searchParams = useSearchParams();
   if (numberOfPages <= 1) return null;
