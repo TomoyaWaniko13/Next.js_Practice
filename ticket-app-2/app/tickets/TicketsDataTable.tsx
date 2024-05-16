@@ -3,21 +3,37 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import TicketStatusBadge from '@/components/TicketStatusBadge';
 import TicketPriority from '@/components/TicketPriority';
 import Link from 'next/link';
+import { SearchParams } from '@/app/tickets/page';
+
+import { ArrowDown } from 'lucide-react';
 
 interface Props {
   tickets: Ticket[];
+  searchParams: SearchParams;
 }
 
-const TicketsDataTable = ({ tickets }: Props) => {
+const TicketsDataTable = ({ tickets, searchParams }: Props) => {
   return (
     <div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>title</TableHead>
-            <TableHead>status</TableHead>
-            <TableHead>priority</TableHead>
-            <TableHead>created at</TableHead>
+            <TableHead>
+              <Link href={{ query: { ...searchParams, orderBy: 'title' } }}>title</Link>
+              {'title' === searchParams.orderBy && <ArrowDown className={'inline p-1'} />}
+            </TableHead>
+            <TableHead>
+              <Link href={{ query: { ...searchParams, orderBy: 'status' } }}>status</Link>
+              {'status' === searchParams.orderBy && <ArrowDown className={'inline p-1'} />}
+            </TableHead>
+            <TableHead>
+              <Link href={{ query: { ...searchParams, orderBy: 'priority' } }}>priority</Link>
+              {'priority' === searchParams.orderBy && <ArrowDown className={'inline p-1'} />}
+            </TableHead>
+            <TableHead>
+              <Link href={{ query: { ...searchParams, orderBy: 'createdAt' } }}>created at</Link>
+              {'createdAt' === searchParams.orderBy && <ArrowDown className={'inline p-1'} />}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
