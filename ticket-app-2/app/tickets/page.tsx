@@ -17,6 +17,7 @@ const TicketsPage = async ({ searchParams }: { searchParams: SearchParams }) => 
   const pageSize = 10;
   const currentPageNumber = parseInt(searchParams.page) || 1;
 
+  // orderBy = 'title', 'status', 'priority', or 'created at'
   const orderBy = searchParams.orderBy ? searchParams.orderBy : 'createdAt';
 
   // statuses =  [ 'OPEN', 'STARTED', 'CLOSED' ]
