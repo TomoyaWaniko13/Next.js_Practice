@@ -22,7 +22,6 @@ interface Props {
 
 // this component is in 'app/tickets/new/page.tsx' and '/app/tickets/edit/[id]/page.tsx'
 const TicketForm = ({ ticket }: Props) => {
-  console.log(ticket);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();

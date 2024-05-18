@@ -1,5 +1,11 @@
+import UserForm from '@/components/UserForm';
+
 const UsersPage = () => {
-  return <>userspage</>;
+  return (
+    <>
+      <UserForm />
+    </>
+  );
 };
 
 export default UsersPage;
