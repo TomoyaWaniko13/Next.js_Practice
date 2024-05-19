@@ -1,17 +1,16 @@
 'use client';
 import React, { useState } from 'react';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
-import { userSchema } from '@/ValidationSchemas/users';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from './ui/input';
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Button } from './ui/button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { User } from '@prisma/client';
+import { userSchema } from '@/ValidationSchemas/userSchema';
 
 type UserFormData = z.infer<typeof userSchema>;
 
@@ -19,6 +18,7 @@ interface Props {
   user?: User;
 }
 
+// This component is used in /app/users/page.tsx
 const UserForm = ({ user }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -43,7 +43,7 @@ const UserForm = ({ user }: Props) => {
       router.refresh();
     } catch (error) {
       console.log(error);
-      setError('Unknown Error Occured.');
+      setError('Unknown Error Occurred.');
       setIsSubmitting(false);
     }
   }
