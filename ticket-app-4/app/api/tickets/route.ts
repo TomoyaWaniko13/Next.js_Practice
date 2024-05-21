@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ticketSchema } from '@/ValidationSchema/tickets';
 import prisma from '@/prisma/db';
+import { ticketSchema } from '@/ValidationSchema/ticket';
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const validation = ticketSchema.safeParse(body);
 
-  // 400 bad request
   if (!validation.success) {
     return NextResponse.json(validation.error.format(), { status: 400 });
   }
