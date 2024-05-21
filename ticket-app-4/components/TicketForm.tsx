@@ -58,6 +58,7 @@ const TicketForm = ({ ticket }: Props) => {
             <FormField
               control={form.control}
               name={'title'}
+              defaultValue={ticket?.title}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Ticket TItle</FormLabel>
@@ -71,20 +72,23 @@ const TicketForm = ({ ticket }: Props) => {
 
           <Controller
             name={'description'}
+            defaultValue={ticket?.description}
             control={form.control}
             render={({ field }) => <SimpleMDE placeholder={'Description'} {...field} />}
           />
+
           <div className={'flex w-full space-x-4 mb-4'}>
             <FormField
               control={form.control}
               name={'status'}
+              defaultValue={ticket?.status}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={ticket?.status}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={'status...'} />
+                        <SelectValue placeholder={'status...'} defaultValue={ticket?.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -99,13 +103,14 @@ const TicketForm = ({ ticket }: Props) => {
             <FormField
               control={form.control}
               name={'priority'}
+              defaultValue={ticket?.priority}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Priority</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={'priority...'} />
+                        <SelectValue placeholder={'priority...'} defaultValue={ticket?.priority} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -119,7 +124,7 @@ const TicketForm = ({ ticket }: Props) => {
             />
           </div>
           <Button type={'submit'} disabled={isSubmitting}>
-            Submit
+            {ticket ? 'Update Ticket' : 'Create Ticket'}
           </Button>
         </form>
       </Form>
