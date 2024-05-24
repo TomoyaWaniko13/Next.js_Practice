@@ -1,28 +1,32 @@
 'use client';
 import Link from 'next/link';
-import React from 'react';
 import { usePathname } from 'next/navigation';
+import React from 'react';
 
-const MainNavLinks = () => {
+const MainNavLinks = ({ role }: { role?: string }) => {
   const links = [
-    { label: 'dashboard', href: '/' },
-    { label: 'tickets', href: '/tickets' },
-    { label: 'users', href: '/users' },
+    { label: 'Dashboard', href: '/', adminOnly: false },
+    { label: 'Tickets', href: '/tickets', adminOnly: false },
+    { label: 'Users', href: '/users', adminOnly: true },
   ];
 
   const currentPath = usePathname();
-
+  console.log(currentPath);
   return (
-    <div className={'flex items-center gap-2'}>
-      {links.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href} // Changed from link.label to link.href
-          className={`font-medium text-muted-foreground transition-colors hover:text-primary/70 ${currentPath === link.href && 'cursor-default text-primary/70 hover:text-primary/60'}`}
-        >
-          {link.label}
-        </Link>
-      ))}
+    <div className='flex items-center gap-2'>
+      {links
+        .filter((link) => !link.adminOnly || role === 'ADMIN')
+        .map((link) => (
+          <Link
+            href={link.href}
+            className={`navbar-link ${
+              currentPath == link.href && 'cursor-default text-primary/70 hover:text-primary/60'
+            }`}
+            key={link.label}
+          >
+            {link.label}
+          </Link>
+        ))}
     </div>
   );
 };
