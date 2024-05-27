@@ -16,7 +16,7 @@ interface MobileNavProps {
 //     },
 //     {
 //         "title": "ブログ",
-//         "href": "/blog"
+//         "href": "/images"
 //     },
 //     {
 //         "title": "価格",

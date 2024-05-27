@@ -33,13 +33,19 @@ export const Post = defineDocumentType(() => ({
     },
   },
   computedFields: {
+    // のフィールドは、ドキュメントのファイルパスから計算されます。具体的には、doc._raw.flattenedPath の
+    // 値の前にスラッシュ(/)を追加します。例えば、もし doc._raw.flattenedPath の値が blog/my-first-post
+    // であれば、slug の値は /blog/my-first-post になります。
     slug: {
       type: 'string',
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
     },
+    // このフィールドも、ドキュメントのファイルパスから計算されます。具体的には、doc._raw.flattenedPath の
+    // 値をスラッシュ(/)で分割し、最初の要素を削除した後の最初の要素を取得します。例えば、もし doc._raw.flattenedPath の
+    // 値が blog/my-first-post であれば、slugIdentifier の値は my-first-post になります。
     slugIdentifier: {
       type: 'string',
-      resolve: (doc) => doc._raw.flattenedPath.split('/').splice(1)[0],
+      resolve: (doc) => doc._raw.flattenedPath.split('/')[1],
     },
   },
 }));
