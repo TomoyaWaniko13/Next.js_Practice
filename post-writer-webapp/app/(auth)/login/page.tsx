@@ -1,5 +1,6 @@
 // import UserAuthForm from '@/components/user-auth-form';
 import Link from 'next/link';
+import UserAuthForm from '@/components/ui/user-auth-form';
 
 const LoginPage = () => {
   return (
@@ -10,7 +11,7 @@ const LoginPage = () => {
           <p className='text-sm text-muted-foreground'>メールアドレスを入力してログインできます。</p>
         </div>
 
-        {/*<UserAuthForm />*/}
+        <UserAuthForm />
 
         <p className='text-muted-foreground px-8 text-center text-sm'>
           <Link href={'/register'} className='underline underline-offset-4'>
