@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { FaGithub } from 'react-icons/fa';
+import { signIn } from 'next-auth/react';
 
 export default function UserAuthForm() {
   return (
@@ -29,7 +30,7 @@ export default function UserAuthForm() {
       </div>
 
       <div className='flex flex-col gap-3'>
-        <Button variant={'outline'}>
+        <Button variant={'outline'} onClick={() => signIn('github')}>
           <FaGithub className={'mr-3'} size={25} />
           Github
         </Button>
