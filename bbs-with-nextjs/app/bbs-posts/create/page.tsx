@@ -8,17 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
-const formSchema = z.object({
-  username: z.string().min(2, { message: 'Username must be at least 2 characters.' }),
-  title: z.string().min(2, { message: 'title must be at least 2 characters.' }),
-  content: z
-    .string()
-    .min(2, { message: 'content must be at least 2 characters.' })
-    .max(200, { message: 'content must be at most 200 characters.' }),
-});
+import prisma from '@/lib/prismaClient';
+import { useRouter } from 'next/navigation';
+import { formSchema } from '@/ZodValidationSchema/bbsPost';
+import { postBBS } from '@/app/actions/postBBSActions';
 
 export default function CreatePost() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,18 +26,12 @@ export default function CreatePost() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     try {
-      await fetch('http://localhost:3000/api/bbsPost', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
+      await postBBS({ ...values });
+      router.push('/');
+      router.refresh();
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }
   return (
@@ -60,11 +51,7 @@ export default function CreatePost() {
               </FormItem>
             )}
           />
-        </form>
-      </Form>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
             control={form.control}
             name='title'
@@ -78,11 +65,7 @@ export default function CreatePost() {
               </FormItem>
             )}
           />
-        </form>
-      </Form>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
             control={form.control}
             name='content'

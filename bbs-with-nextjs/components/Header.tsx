@@ -1,6 +1,8 @@
 import { Button, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
+import { logout } from '@/app/logout/actions';
+import { login } from '@/app/login/actions';
 
 const Header = () => {
   return (
